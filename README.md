@@ -134,11 +134,30 @@ Also, you can use css to add colors.
 ```
 ```css
 .vue-icon path[pid="0"] {
-    color: #42b983
+    fill: #42b983
 }
 
 .vue-icon path[pid="1"] {
-    color: #35495e
+    fill: #35495e
 }
 ```
-> You can't use scoped css.
+> You can't use this feature in scoped block.
+
+Use gradient
+```html
+<template>
+    <svg>
+       <defs>
+          <linearGradient id="gradient-1" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%"  stop-color="#57f0c2"/>
+              <stop offset="95%" stop-color="#147d58"/>
+          </linearGradient>
+          <linearGradient id="gradient-2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%"  stop-color="#7295c2"/>
+              <stop offset="95%" stop-color="#252e3d"/>
+          </linearGradient>
+      </defs>
+    </svg>
+    <svgicon icon="vue" width="15rem" height="15rem" color="url(#gradient-1) url(#gradient-2)"></svgicon>
+</template>
+```
