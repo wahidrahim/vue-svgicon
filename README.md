@@ -1,4 +1,9 @@
 # vue-svgicon
+
+[![Build Status](https://img.shields.io/travis/MMF-FE/vue-svgicon.svg?style=flat-square)](https://travis-ci.org/MMF-FE/vue-svgicon)
+[![Coverage Status](https://img.shields.io/coveralls/MMF-FE/vue-svgicon.svg?style=flat-square)](https://coveralls.io/r/MMF-FE/vue-svgicon?branch=master)
+
+
 A tool to create svg icon components. (vue 2.x)
 
 ## Inspiration
@@ -170,3 +175,21 @@ Use gradient
 </template>
 ```
 
+### Multiple directory (Namespace)
+You can use multiple directory to discriminate the icons which has the same name.
+```txt
+|-- src
+    arrow.svg
+    |-- sora
+        arrow.svg
+        |-- fit
+            arrow.svg
+
+```
+
+```html
+<svgicon icon="arrow" width="50" height="50"></svgicon>
+<svgicon icon="sora/arrow" width="50" height="50"></svgicon>
+<svgicon icon="sora/fit/arrow" width="50" height="50"></svgicon>
+
+```
