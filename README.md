@@ -14,20 +14,20 @@ https://mmf-fe.github.io/vue-svgicon/
 
 ## Usage
 ### Generate icon
-Install
+#### Install
 ```bash
 # install global
 npm install vue-svgicon -g
 # install for project
 npm install vue-svgicon --save-dev
 ```
-Command
+#### Command
 ```bash
 # generate svg icon components
 vsvg -s /path/to/svg/source -t /path/for/generated/components
 ```
 
-Use as npm scripts
+#### Use as npm scripts
 ```json
 {
     "scripts": {
@@ -35,10 +35,35 @@ Use as npm scripts
     }
 }
 ```
+
 ```bash
 # bash
 npm run svg
 ```
+
+It will generate icons to the specified path.
+
+#### Custom icon content format
+
+```bash
+# specify template path
+vsvg -s /path/to/svg/source -t /path/for/generated/components --tpl /path/for/icon-template
+```
+Default template is:
+```javascript
+var icon = require('vue-svgicon')
+icon.register({
+  '${name}': {
+    width: ${width},
+    height: ${height},
+    viewBox: ${viewBox},
+    data: '${data}'
+  }
+})
+
+```
+
+
 
 ### Use generated icon
 Use plugin
@@ -141,7 +166,7 @@ If the icon is mutil path/shape, you can use mutil color. It is defined in the o
 ```html
 <svgicon icon="vue" width="100" height="100" color="#42b983 #35495e"></svgicon>
 ```
-Also, you can use css to add colors.
+Also, you can use CSS to add colors.
 ```html
 <svgicon class="vue-icon" icon="vue" width="100" height="100"></svgicon>
 ```
@@ -177,13 +202,12 @@ Use gradient
 
 ### Multiple directory (Namespace)
 You can use multiple directory to discriminate the icons which has the same name.
-```txt
-|-- src
-    arrow.svg
-    |-- sora
-        arrow.svg
-        |-- fit
-            arrow.svg
+```
+├── arrow.svg
+├── sora
+│   ├── arrow.svg
+│   └── fit
+│       └── arrow.svg
 
 ```
 
@@ -193,3 +217,22 @@ You can use multiple directory to discriminate the icons which has the same name
 <svgicon icon="sora/fit/arrow" width="50" height="50"></svgicon>
 
 ```
+
+### Work on server-side render (SSR)
+The component will insert the CSS style to the **document** object, so it will throw an error in SSR. The solution is to define an alias for vue-svgicon module if you use webpack.
+
+```javascript
+var config = {
+    module: {
+        resolve: {
+            alias: {
+                'vue-svgicon$': 'vue-svgicon/component/svgicon.vue'
+            }
+        }
+    }
+}
+```
+If you are using other build systems..., I think you can find a similar solution to how webpack does it.
+
+### Work on IE
+This component doesn't work on IE because IE don't support `innerHTML` in SVGElement. You can use this polyfill to make it work. https://github.com/dnozay/innersvg-polyfill
