@@ -9,7 +9,7 @@
 const fs = require('fs-plus')
 const path = require('path')
 const Svgo = require('svgo')
-const golb = require('glob')
+const glob = require('glob')
 const args = require('yargs')
   .usage('Usage: $0 -s svgSourcePath -t targetPath')
   .demandOption(['s', 't'])
@@ -28,9 +28,6 @@ let targetPath = path.join(process.cwd(), args.t)
 // the template file which to generate icon files
 let tplPath = args.tpl ? path.join(process.cwd(), args.tpl) : path.join(__dirname, '../icon.tpl.txt')
 let tpl = fs.readFileSync(tplPath, 'utf8')
-
-// delete previous icons
-fs.removeSync(targetPath)
 
 let svgo = new Svgo({
   plugins: [
@@ -102,7 +99,7 @@ function generateIndex(files) {
   })
 }
 
-golb(filepath, function (err, files) {
+glob(filepath, function (err, files) {
   if (err) {
     console.log(err)
     return false
@@ -114,6 +111,14 @@ golb(filepath, function (err, files) {
     let name = path.basename(filename).split('.')[0]
     let content = fs.readFileSync(filename, 'utf-8')
     let filePath = getFilePath(filename)
+
+    // remove existing file from target path
+    let file = filename.replace(/^.*[\\\/]/, '')
+    let outFile = path.join(targetPath, file).replace(/\.svg$/, '.js')
+
+    if (fs.existsSync(outFile)) {
+      fs.removeSync(outFile)
+    }
 
     svgo.optimize(content, (result) => {
       let data = result.data.replace(/<svg[^>]+>/gi, '').replace(/<\/svg>/gi, '')
@@ -152,4 +157,3 @@ golb(filepath, function (err, files) {
     })
   })
 })
-
